@@ -1,0 +1,21 @@
+{
+  "name": "Finch Care",
+  "short_name": "Finch Care",
+  "description": "A safety-first anxiety companion for in-the-moment resets and gentle skill-building",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
