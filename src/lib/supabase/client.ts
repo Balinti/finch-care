@@ -1,42 +1,13 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+// Hardcoded Supabase configuration - shared across all apps
+const supabaseUrl = 'https://api.srv936332.hstgr.cloud'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE'
 
-// Check if Supabase is configured
+// Check if Supabase is configured (always true now with hardcoded values)
 export const isSupabaseConfigured = () => {
-  return Boolean(supabaseUrl && supabaseAnonKey)
-}
-
-// Create a mock client that does nothing when Supabase is not configured
-const createMockClient = (): SupabaseClient => {
-  const mockResponse = { data: null, error: null }
-  const mockQuery = () => ({
-    select: () => mockQuery(),
-    insert: () => Promise.resolve(mockResponse),
-    update: () => mockQuery(),
-    upsert: () => Promise.resolve(mockResponse),
-    delete: () => mockQuery(),
-    eq: () => mockQuery(),
-    single: () => Promise.resolve(mockResponse),
-    order: () => mockQuery(),
-    limit: () => mockQuery(),
-  })
-
-  return {
-    from: () => mockQuery(),
-    auth: {
-      getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-      signUp: () => Promise.resolve({ data: { user: null, session: null }, error: { message: 'Supabase not configured' } }),
-      signInWithPassword: () => Promise.resolve({ data: { user: null, session: null }, error: { message: 'Supabase not configured' } }),
-      signOut: () => Promise.resolve({ error: null }),
-      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-    },
-  } as unknown as SupabaseClient
+  return true
 }
 
 // Client-side Supabase client (uses anon key)
-// Returns a mock client if Supabase is not configured to prevent build errors
-export const supabase = isSupabaseConfigured()
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : createMockClient()
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)

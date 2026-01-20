@@ -1,27 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase/client'
-import type { User } from '@supabase/supabase-js'
+import { useState } from 'react'
+import GoogleAuth from './GoogleAuth'
 
 export default function Header() {
-  const [user, setUser] = useState<User | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => {
-    if (!isSupabaseConfigured()) return
-
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
 
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -62,21 +46,7 @@ export default function Header() {
           <Link href="/crisis" className="text-rose-600 hover:text-rose-700 font-medium">
             Crisis Help
           </Link>
-          {user ? (
-            <Link
-              href="/account"
-              className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700"
-            >
-              Account
-            </Link>
-          ) : (
-            <Link
-              href="/auth/sign-in"
-              className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700"
-            >
-              Sign In
-            </Link>
-          )}
+          <GoogleAuth />
         </div>
       </nav>
 
@@ -120,23 +90,7 @@ export default function Header() {
               Crisis Help
             </Link>
             <div className="border-t border-slate-200 pt-3">
-              {user ? (
-                <Link
-                  href="/account"
-                  className="block bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 text-center"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Account
-                </Link>
-              ) : (
-                <Link
-                  href="/auth/sign-in"
-                  className="block bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 text-center"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
-              )}
+              <GoogleAuth />
             </div>
           </div>
         </div>
